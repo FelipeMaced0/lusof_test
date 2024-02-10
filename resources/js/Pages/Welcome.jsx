@@ -1,14 +1,27 @@
 import { Link, Head, router } from '@inertiajs/react';
+import { notification } from 'antd';
+
 
 export default function Welcome({ auth, contacts }) {
+
+    const [api, contextHolder] = notification.useNotification();
+
+    const openNotificationWithIcon = (message, description, type) => {
+        api[type]({
+          message: message,
+          description:description,
+        });
+    };
 
     const deleteContact = (id) => {
         axios.delete(route('contact.delete', { contact: id }))
             .then((response) => {
-                alert(JSON.stringify(response.data));
+                openNotificationWithIcon('Success', response.data, 'success');
                 router.reload();
             })
-            .catch((error) => alert(JSON.stringify(error.response.data)));
+            .catch((error) => {
+                openNotificationWithIcon('Error', error.response.data.message, 'error');
+            });
 
     }
 
@@ -19,6 +32,7 @@ export default function Welcome({ auth, contacts }) {
     return (
         <>
             <Head title="Welcome" />
+            {contextHolder}
             <div className="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
                 <div className="sm:fixed sm:top-0 sm:right-0 p-6 text-end">
                     {auth.user ? (
