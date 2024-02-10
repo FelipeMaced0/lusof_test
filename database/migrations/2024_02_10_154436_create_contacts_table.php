@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('contact', 9)->unique();
             $table->string('email')->unique();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
