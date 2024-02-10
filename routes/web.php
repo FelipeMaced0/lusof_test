@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('contact')->name('contact.')->controller(ContactController::class)->group(function(){
-        Route::get('edit/{contact}', 'edit')->name('edit');
+        Route::get('edit/{contact?}', 'edit')->name('edit');
         Route::put('create', 'store')->name('create');
         Route::patch('update/{contact}', 'update')->name('update');
         Route::delete('delete/{contact}', 'destroy')->name('delete');

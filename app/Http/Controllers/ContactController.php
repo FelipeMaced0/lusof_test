@@ -13,11 +13,11 @@ class ContactController extends Controller
 {
 
     /**
-     * Display the user's profile form.
+     * Display
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request, Contact $contact = null): Response
     {
-        return Inertia::render('Contact/Edit', );
+        return Inertia::render('Dashboard', ['contact' => $contact]);
     }
 
     public function store(Request $request)
@@ -45,8 +45,8 @@ class ContactController extends Controller
     {
         $validated  = $request->validate([
             'name' => 'nullable|string|min:5',
-            'contact' => 'nullable|string|min:9|max:9|unique:contacts,contact',
-            'email' => 'nullable|email|unique:contacts,email'
+            'contact' => 'nullable|string|min:9|max:9',
+            'email' => 'nullable|email'
         ]);
 
         $updated = $contact->update($validated);

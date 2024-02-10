@@ -1,19 +1,19 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, router } from '@inertiajs/react';
 
 export default function Welcome({ auth, contacts }) {
-    
+
     const deleteContact = (id) => {
-        axios.delete(route('contact.delete', {contact:id}))
-        .then((response) => alert(JSON.stringify(response.data)))
-        .catch((error)  => alert(JSON.stringify(error.response.data)));
+        axios.delete(route('contact.delete', { contact: id }))
+            .then((response) => {
+                alert(JSON.stringify(response.data));
+                router.reload();
+            })
+            .catch((error) => alert(JSON.stringify(error.response.data)));
 
     }
 
-    const createContact = () => {
-        axios.put(route('contact.create', {contact:'123456789', email: 'f@f.com', name:'ferdinaod'}))
-        .then((response) => alert(JSON.stringify(response.data)))
-        .catch((error)  => alert(JSON.stringify(error.response.data)));
-
+    const editContact = (id) => {
+        router.get(route('contact.edit', { contact: id }));
     }
 
     return (
@@ -47,16 +47,20 @@ export default function Welcome({ auth, contacts }) {
                     )}
                 </div>
 
-                <div className="max-w-7xl mx-auto p-6 lg:p-8 flex flex-col items-center">
-                <h1>Available Contacts</h1>
-                    {contacts?.map((contact) => 
+                <div className="max-w-7xl mx-auto p-6 lg:p-8 flex flex-col items-center overflow-auto gap-y-5">
+                    <h1 className='font-bold'>Available Contacts</h1>
+                    {contacts?.map((contact) =>
                         <>
-                            <div className='border border-red-500 w-[60rem] flex flex-row justify-around h-52 overflow-auto'>
-                                <span>{contact.name}</span>
-                                <span>{contact.contact}</span>
-                                <span>{contact.email}</span>
-                                <button className='bg-blue-500' onClick={() => {deleteContact(contact.id)}}>Delete</button>
-                                <button className='bg-blue-500' onClick={() => {createContact()}}>create</button>
+                            <div className='w-[60rem] flex flex-row justify-around h-10'>
+                                <div className='w-[40rem] flex flex-row gap-x-5'>
+                                    <span>{contact.name}</span>
+                                    <span>{contact.contact}</span>
+                                    <span>{contact.email}</span>
+                                </div>
+                                <div className='w-32 flex flex-row gap-x-5'>
+                                    <button className='bg-red-500 shadow-lg rounded p-2 hover:bg-red-400' onClick={() => { deleteContact(contact.id) }}>Delete</button>
+                                    <button className='bg-blue-500 shadow-lg rounded p-2 hover:bg-blue-400' onClick={() => { editContact(contact.id) }}>Edit</button>
+                                </div>
                             </div>
                         </>
                     )}
